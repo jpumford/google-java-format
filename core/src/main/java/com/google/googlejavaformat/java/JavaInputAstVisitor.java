@@ -1566,7 +1566,8 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
 
   private void methodBody(MethodTree node) {
     if (node.getBody().getStatements().isEmpty()) {
-      builder.blankLineWanted(BlankLineWanted.NO);
+      // all empty methods should not have their braces on the same line
+      builder.forcedBreak();
     } else {
       builder.open(plusTwo);
       builder.forcedBreak();
