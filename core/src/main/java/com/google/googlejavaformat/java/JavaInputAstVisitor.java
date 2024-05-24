@@ -3815,7 +3815,8 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
       return;
     }
     builder.breakToFill(" ");
-    builder.open(types.size() > 1 ? plusFour : ZERO);
+    // don't indent more when we implement more than one interface
+    builder.open(ZERO);
     token(token);
     builder.space();
     boolean afterFirstToken = false;
