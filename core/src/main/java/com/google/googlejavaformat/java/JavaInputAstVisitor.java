@@ -3090,7 +3090,8 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
     // Are there method invocations or field accesses after the prefix?
     boolean trailingDereferences = !prefixes.isEmpty() && getLast(prefixes) < items.size() - 1;
 
-    builder.open(plusFour);
+    // dotted expressions in binary expressions are not indented for whatever reason
+    builder.open(inBinaryExpression ? ZERO : plusFour);
     for (int times = 0; times < prefixes.size(); times++) {
       builder.open(ZERO);
     }
