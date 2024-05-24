@@ -165,6 +165,7 @@ import org.jspecify.annotations.Nullable;
  * CompilationUnitTree}.
  */
 public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
+  private boolean inBinaryExpression = false;
 
   /** Direction for Annotations (usually VERTICAL). */
   protected enum Direction {
@@ -1177,7 +1178,14 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
     List<String> operators = new ArrayList<>();
     walkInfix(precedence(node), node, operands, operators);
     FillMode fillMode = hasOnlyShortItems(operands) ? INDEPENDENT : UNIFIED;
-    builder.open(plusFour);
+    // make sure we don't double-indent subexpressions of a binary operator, jetbrains doesn't do this
+    boolean isParentExpression = !this.inBinaryExpression;
+    if (isParentExpression) {
+      builder.open(plusFour);
+      this.inBinaryExpression = true;
+    } else {
+      builder.open(ZERO);
+    }
     scan(operands.get(0), null);
     int operatorsN = operators.size();
     for (int i = 0; i < operatorsN; i++) {
@@ -1185,6 +1193,9 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
       builder.op(operators.get(i));
       builder.space();
       scan(operands.get(i + 1), null);
+    }
+    if (isParentExpression) {
+      this.inBinaryExpression = false;
     }
     builder.close();
     return null;
