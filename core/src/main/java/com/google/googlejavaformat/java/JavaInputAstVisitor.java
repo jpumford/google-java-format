@@ -3900,7 +3900,8 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
         return Direction.VERTICAL;
       }
     }
-    return Direction.HORIZONTAL;
+    // all annotations need to be stacked, not just annotations without parameters
+    return Direction.VERTICAL;
   }
 
   /**
