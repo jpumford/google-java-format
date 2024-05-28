@@ -166,6 +166,7 @@ import org.jspecify.annotations.Nullable;
  */
 public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
   private boolean inBinaryExpression = false;
+  private int dotExpressionStack = 0;
 
   /** Direction for Annotations (usually VERTICAL). */
   protected enum Direction {
@@ -708,7 +709,7 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
       visitAnnotations(annotations, BreakOrNot.NO, BreakOrNot.YES);
     }
     scan(node.getIdentifier(), null);
-    addArguments(node.getArguments(), plusFour);
+    addArguments(node.getArguments(), this.dotExpressionStack > 0 ? ZERO : plusFour);
     builder.close();
     if (node.getClassBody() != null) {
       addBodyDeclarations(
@@ -2915,6 +2916,7 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
         token(".");
       } else {
         builder.open(plusFour);
+        this.dotExpressionStack++;
         scan(getArrayBase(node), null);
         builder.breakOp();
         needDot = true;
@@ -2922,6 +2924,7 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
       formatArrayIndices(getArrayIndices(node));
       if (stack.isEmpty()) {
         builder.close();
+        this.dotExpressionStack--;
         return;
       }
     }
@@ -2992,6 +2995,7 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
 
     if (node != null) {
       builder.close();
+      this.dotExpressionStack--;
     }
   }
 
