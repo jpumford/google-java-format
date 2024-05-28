@@ -755,7 +755,7 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
     token("do");
     visitStatement(
         node.getStatement(),
-        CollapseEmptyOrNot.YES,
+        CollapseEmptyOrNot.NO,
         AllowLeadingBlankLine.YES,
         AllowTrailingBlankLine.YES);
     if (node.getStatement().getKind() == BLOCK) {
