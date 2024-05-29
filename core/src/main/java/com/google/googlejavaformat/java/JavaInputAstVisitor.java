@@ -510,7 +510,7 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
       }
       token("}", plusTwo);
     } else if ((cols = argumentsAreTabular(expressions)) != -1) {
-      builder.open(plusTwo);
+      builder.open(plusFour);
       token("{");
       builder.forcedBreak();
       boolean afterFirstToken = false;
@@ -532,9 +532,9 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
         builder.close();
         afterFirstToken = true;
       }
-      builder.breakOp(minusTwo);
+      builder.breakOp(minusFour);
       builder.close();
-      token("}", plusTwo);
+      token("}", plusFour);
     } else {
       // Special-case the formatting of array initializers inside annotations
       // to more eagerly use a one-per-line layout.
@@ -554,8 +554,9 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
       boolean shortItems = hasOnlyShortItems(expressions);
       boolean allowFilledElementsOnOwnLine = shortItems || !inMemberValuePair;
 
-      builder.open(plusTwo);
-      tokenBreakTrailingComment("{", plusTwo);
+      // aosp indentation uses plusFour
+      builder.open(plusFour);
+      tokenBreakTrailingComment("{", plusFour);
       boolean hasTrailingComma = hasTrailingToken(builder.getInput(), expressions, ",");
       builder.breakOp(hasTrailingComma ? FillMode.FORCED : FillMode.UNIFIED, "", ZERO);
       if (allowFilledElementsOnOwnLine) {
@@ -575,9 +576,9 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
       if (allowFilledElementsOnOwnLine) {
         builder.close();
       }
-      builder.breakOp(minusTwo);
+      builder.breakOp(minusFour);
       builder.close();
-      token("}", plusTwo);
+      token("}", plusFour);
     }
     return false;
   }
