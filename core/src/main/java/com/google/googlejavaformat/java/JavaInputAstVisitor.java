@@ -1180,7 +1180,8 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
     // make sure we don't double-indent subexpressions of a binary operator, jetbrains doesn't do this
     boolean isParentExpression = !this.inBinaryExpression;
     if (isParentExpression) {
-      builder.open(plusFour);
+      // jetbrains only half-indents plus operators
+      builder.open(operators.get(0).equals("+") ? plusTwo : plusFour);
       this.inBinaryExpression = true;
     } else {
       builder.open(ZERO);
