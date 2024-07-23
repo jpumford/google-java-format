@@ -72,8 +72,8 @@ class FormatFileCallable implements Callable<FormatFileCallable.Result> {
       }
 
       Formatter formatter = new Formatter(options);
-      String formatted = formatter.formatSource(input, characterRanges(input).asRanges());
-      formatted = fixImports(formatted);
+      String importsFixed = fixImports(input);
+      String formatted = formatter.formatSource(importsFixed, characterRanges(importsFixed).asRanges());
       if (parameters.reflowLongStrings()) {
         formatted = StringWrapper.wrap(Formatter.MAX_LINE_LENGTH, formatted, formatter);
       }
